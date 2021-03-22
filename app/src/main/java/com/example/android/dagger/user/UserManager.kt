@@ -16,6 +16,7 @@
 
 package com.example.android.dagger.user
 
+import android.app.AppComponentFactory
 import com.example.android.dagger.storage.Storage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,15 +26,17 @@ private const val PASSWORD_SUFFIX = "password"
 
 @Singleton
 class UserManager @Inject constructor(
-    private val storage: Storage
+    private val storage: Storage,
+    private val userComponentFactory: UserComponent.Factory
 ) {
 
-    var userDataRepository: UserDataRepository? = null
+    var userComponent: UserComponent? = null
+        private set
 
     val username: String
         get() = storage.getString(REGISTERED_USER)
 
-    fun isUserLoggedIn() = userDataRepository != null
+    fun isUserLoggedIn() = userComponent != null
 
     fun isUserRegistered() = storage.getString(REGISTERED_USER).isNotEmpty()
 
@@ -55,7 +58,7 @@ class UserManager @Inject constructor(
     }
 
     fun logout() {
-        userDataRepository = null
+        userComponent = null
     }
 
     fun unregister() {
@@ -66,6 +69,6 @@ class UserManager @Inject constructor(
     }
 
     private fun userJustLoggedIn() {
-        userDataRepository = UserDataRepository(this)
+        userComponent = userComponentFactory.create()
     }
 }

@@ -19,6 +19,7 @@ package com.example.android.dagger.user
 import javax.inject.Inject
 import kotlin.random.Random
 
+@LoggedUserScope
 class UserDataRepository @Inject constructor(
     private val userManager: UserManager
 ) {

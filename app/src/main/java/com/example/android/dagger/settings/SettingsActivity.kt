@@ -28,15 +28,18 @@ import javax.inject.Inject
 
 class SettingsActivity : AppCompatActivity() {
 
-    @Inject lateinit var settingsViewModel: SettingsViewModel
-    @Inject lateinit var userManager: UserManager
+    @Inject
+    lateinit var settingsViewModel: SettingsViewModel
+
+    @Inject
+    lateinit var userManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.inject(this)
+        val userManager = (application as MyApplication).appComponent.userManager()
+        userManager.userComponent!!.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        settingsViewModel = SettingsViewModel(userManager.userDataRepository!!, userManager)
         setupViews()
     }
 
